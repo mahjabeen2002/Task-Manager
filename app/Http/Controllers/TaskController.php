@@ -11,7 +11,7 @@ class TaskController extends Controller
     public function index(Project $project)
     {
         $tasks = $project->tasks()->get()->groupBy('status');
-        $users = $project->users()->get();  
+        $users = $project->users()->get();
         return view('tasks.index', compact('project', 'tasks', 'users'));
     }
 

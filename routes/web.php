@@ -1,16 +1,17 @@
 <?php
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ChecklistItemController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\NoteController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\ProjectFileController;
-use App\Http\Controllers\ReminderController;
-use App\Http\Controllers\RoutineController;
 use App\Http\Controllers\TaskController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RoutineController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ReminderController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProjectFileController;
+use App\Http\Controllers\ChecklistItemController;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -28,12 +29,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::put('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::post('tasks/{task}/update-status', [TaskController::class, 'updateStatus']);
-    
+
     Route::resource('routines', RoutineController::class)->except(['show']);
     Route::get('routines/showAll', [RoutineController::class, 'showAll'])->name('routines.showAll');
     Route::get('routines/daily', [RoutineController::class, 'showDaily'])->name('routines.showDaily');
     Route::get('routines/weekly', [RoutineController::class, 'showWeekly'])->name('routines.showWeekly');
     Route::get('routines/monthly', [RoutineController::class, 'showMonthly'])->name('routines.showMonthly');
+
+    Route::get('/admin/register', [RegisterController::class, 'showRegistrationForm'])->name('admin.register');
+    Route::post('/admin/register', [RegisterController::class, 'register'])->name('register');
+    Route::get('/admin/employees', [RegisterController::class, 'list'])->name('employees.index');
+    Route::get('/admin/employees/{id}/edit', [RegisterController::class, 'edit'])->name('employees.edit');
+    Route::put('/admin/employees/{id}', [RegisterController::class, 'update'])->name('employees.update');
+    Route::delete('/admin/employees/{id}', [RegisterController::class, 'destroy'])->name('employees.destroy');
+
+
     Route::resource('files', FileController::class);
     Route::resource('notes', NoteController::class);
     Route::resource('reminders', ReminderController::class);
@@ -53,14 +63,14 @@ Route::middleware(['auth'])->group(function () {
         $upcomingReminders = $user->reminders()->where('date', '>=', now())->orderBy('date')->take(5)->get();
 
         return view('dashboard', compact(
-            'tasksCount', 
-            'routinesCount', 
-            'notesCount', 
+            'tasksCount',
+            'routinesCount',
+            'notesCount',
             'remindersCount',
-            'filesCount', 
-            'recentTasks', 
-            'todayRoutines', 
-            'recentNotes', 
+            'filesCount',
+            'recentTasks',
+            'todayRoutines',
+            'recentNotes',
             'upcomingReminders'
         ));
     })->name('dashboard');

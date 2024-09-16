@@ -45,16 +45,16 @@
                         <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#createTaskModal"
                             data-status="to_do" style="padding-top: 0.5rem; padding-bottom: 0.5rem;">+</button>
                     </div>
-                    
+
                     <div class="kanban-list" id="to_do">
                         @foreach ($tasks['to_do'] ?? [] as $task)
                             <div class="card mb-3 kanban-item" data-id="{{ $task->id }}" draggable="true">
                                 <div class="card-body">
                                     <h5 class="card-title">
-                                        {{ $task->title }} 
+                                        {{ $task->title }}
                                         <span style="font-size: 12px;" class="badge {{ $task->priority == 'low' ? 'bg-success' : ($task->priority == 'medium' ? 'bg-warning' : 'bg-danger') }}">{{ ucfirst($task->priority) }}</span>
                                     </h5>
-                                    
+
                                     <p class="card-text">{{ $task->description }}</p>
                                     <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
                                 </div>
@@ -72,7 +72,7 @@
                             data-bs-target="#createTaskModal" data-status="in_progress"
                             style="padding-top: 0.5rem; padding-bottom: 0.5rem;">+</button>
                     </div>
-                    
+
                     <div class="kanban-list" id="in_progress">
                         @foreach ($tasks['in_progress'] ?? [] as $task)
                             <div class="card mb-3 kanban-item" data-id="{{ $task->id }}" draggable="true">
@@ -157,7 +157,7 @@
                                 <label for="user_id" class="form-label">Assign To</label>
                                 <select name="user_id" id="user_id" class="form-select">
                                     <option value="{{auth()->user()->id}}">Self</option>
-                                    @foreach ($users as $user)  
+                                    @foreach ($users as $user)
                                         <option value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
                                 </select>
@@ -186,8 +186,8 @@
             const taskStatusInput = document.getElementById('task_status');
 
             createTaskModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget; 
-                var status = button.getAttribute('data-status'); 
+                var button = event.relatedTarget;
+                var status = button.getAttribute('data-status');
                 taskStatusInput.value = status;
             });
 

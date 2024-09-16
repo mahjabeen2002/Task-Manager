@@ -82,7 +82,7 @@ class ProjectController extends Controller
             'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
         ]);
-       
+
         $project = Project::find($request->project_id);
         $project->teamProjects()->attach($request->user_id);
         return redirect()->back()->with('success', 'User added successfully.');
